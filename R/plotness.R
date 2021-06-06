@@ -6,6 +6,7 @@
 #' graphics package can be used.
 #' @importFrom vcd goodfit
 #' @import ggplot2
+#' @import stats
 #' @param x either a vector of counts, a 1-way table of frequencies of counts or
 #'  a data frame or matrix with frequencies in the first column and the
 #'  corresponding counts in the second column.
@@ -31,8 +32,8 @@
 #'  data frame containing the data necessary to produce a plot.
 #' @examples
 #' plotness(rpois(15,10),type="poisson");
-#' plotness(rbinom(15,10),type="binomial");
-#' plotness(rnbinom(15,10),type="binomial");
+#' plotness(rbinom(15,10,prob=0.5),type="binomial");
+#' plotness(rnbinom(15,10,prob=0.5),type="binomial");
 #' plotness(rpois(15,10),type="poisson", plot=FALSE);
 #' @export
 plotness <-

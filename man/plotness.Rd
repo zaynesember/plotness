@@ -67,8 +67,8 @@ graphics package can be used.
 }
 \examples{
 plotness(rpois(15,10),type="poisson");
-plotness(rbinom(15,10),type="binomial");
-plotness(rnbinom(15,10),type="binomial");
+plotness(rbinom(15,10,prob=0.5),type="binomial");
+plotness(rnbinom(15,10,prob=0.5),type="binomial");
 plotness(rpois(15,10),type="poisson", plot=FALSE);
 }
 \author{
