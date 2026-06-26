@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotness.R
 \name{plotness}
 \alias{plotness}
-\title{Poisonness, Binomialness, and Negative Binomialness Plots}
+\title{Poissonness, Binomialness, and Negative Binomialness Plots}
 \usage{
 plotness(
   x,
@@ -35,11 +35,11 @@ estimated from the data.}
 \item{lambda}{parameter of the poisson distribution. If type is "poisson"
 and lambda is specified a leveled Poissonness plot is produced.}
 
-\item{plot}{logical. When `TRUE` a ggplot is returned; otherwise a data frame
+\item{plot}{logical. When \code{TRUE} a ggplot is returned; otherwise a data frame
 containing data necessary for a plot is returned.}
 
 \item{title}{a character string to be used as the title of the plot. If set
-to `NULL` a generic title is produced based on the distribution type.}
+to \code{NULL} a generic title is produced based on the distribution type.}
 
 \item{legend}{logical. Should a legend be plotted?}
 
@@ -56,8 +56,8 @@ to `NULL` a generic title is produced based on the distribution type.}
 \item{ylab}{a label for the y-axis.}
 }
 \value{
-If `plot`=`TRUE`, returns a ggplot object; otherwise returns a
- data frame containing the data necessary to produce a plot.
+If \code{plot}=\code{TRUE}, returns a ggplot object; otherwise returns a
+data frame containing the data necessary to produce a plot.
 }
 \description{
 Creates a diagnostic distribution plot or dataframe. The function is adapted
@@ -68,9 +68,9 @@ graphics package can be used.
 \examples{
 plotness(rpois(15,10),type="poisson");
 plotness(rbinom(15,10,prob=0.5),type="binomial");
-plotness(rnbinom(15,10,prob=0.5),type="binomial");
+plotness(rnbinom(15,10,prob=0.5),type="nbinomial");
 plotness(rpois(15,10),type="poisson", plot=FALSE);
 }
 \author{
-Zayne Sember <zsember@ucsd.edu>
+Zayne Sember \href{mailto:zaynesember@gmail.com}{zaynesember@gmail.com}
 }
