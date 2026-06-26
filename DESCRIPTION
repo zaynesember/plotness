@@ -1,16 +1,29 @@
 Package: plotness
 Type: Package
-Title: Poisonness, Binomialness, and Negative Binomialness Plots
-Version: 0.1.0
-Author: Zayne Sember <zsember@ucsd.edu>
-Maintainer: Zayne Sember <zsember@ucsd.edu>
-Description: Creates a diagnostic distribution plot or dataframe. The function is adapted from the vcd library's distplot function to produce ggplots and to allow the option to return only the data needed for the plot so the user's preferred graphics package can be used.
+Title: Poissonness, Binomialness, and Negative Binomialness Plots
+Version: 0.1.0.9000
+Authors@R:
+    person("Zayne", "Sember", email = "zaynesember@gmail.com",
+           role = c("aut", "cre"))
+Description: Creates a diagnostic distribution plot or data frame. The function
+    is adapted from the 'vcd' package's distplot() function to produce ggplots
+    and to allow the option to return only the data needed for the plot so the
+    user's preferred graphics package can be used.
 Depends:
     R (>= 4.0)
 Imports:
-    vcd,
-    ggplot2
-License: MIT
+    ggplot2,
+    stats,
+    vcd
+License: MIT + file LICENSE
+URL: https://github.com/zaynesember/plotness
+BugReports: https://github.com/zaynesember/plotness/issues
 Encoding: UTF-8
-LazyData: true
-RoxygenNote: 7.1.1
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Suggests:
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+VignetteBuilder: knitr

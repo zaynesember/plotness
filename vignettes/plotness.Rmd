@@ -1,0 +1,141 @@
+---
+title: "Diagnostic distribution plots with plotness"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Diagnostic distribution plots with plotness}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 4.5,
+  dpi = 96
+)
+set.seed(20210)
+```
+
+## What these plots are for
+
+When you have count data, a natural first question is *which discrete
+distribution does it look like* — Poisson, binomial, or negative binomial?
+**Distribution-ness plots** (Hoaglin & Tukey) answer that visually. Each one
+transforms the observed frequencies through a distribution-specific *metameter*
+chosen so that, **if the data really follow that distribution, the points fall
+on a straight line.** Systematic curvature or scatter away from the line is the
+diagnostic signal that the distribution does not fit.
+
+`plotness()` builds these plots with `ggplot2`. It is adapted from
+`vcd::distplot()`, with two additions: the output is a ggplot you can theme and
+extend, and `plot = FALSE` hands you the underlying data so you can draw the
+plot however you like.
+
+```{r}
+library(plotness)
+library(ggplot2)
+```
+
+## Poissonness plot
+
+The straight-line case. We simulate Poisson counts and check them against the
+Poisson metameter — the points should hug the fitted "perfect distribution"
+line, and the on-plot panel reports the slope, intercept, and the implied
+parameter estimate (`exp(slope)` ≈ the rate λ).
+
+```{r poisson}
+pois_counts <- rpois(200, lambda = 6)
+plotness(pois_counts, type = "poisson")
+```
+
+## Binomialness plot
+
+For binomial data you supply `size` (the number of trials). If you omit it,
+`plotness()` falls back to the maximum observed count and warns you — fine for a
+quick look, but pass the real value when you know it.
+
+```{r binomial}
+binom_counts <- rbinom(200, size = 10, prob = 0.3)
+plotness(binom_counts, type = "binomial", size = 10)
+```
+
+## Negative binomialness plot
+
+When `size` is left `NULL` for `type = "nbinomial"`, the dispersion parameter is
+estimated from the data.
+
+```{r nbinomial}
+nbinom_counts <- rnbinom(200, size = 4, prob = 0.4)
+plotness(nbinom_counts, type = "nbinomial")
+```
+
+## Diagnosing a *bad* fit
+
+The plots earn their keep when the distribution is wrong. Negative-binomial data
+is overdispersed relative to Poisson, so feeding it to the **Poissonness** plot
+should bend the points away from the line:
+
+```{r misfit}
+overdispersed <- rnbinom(200, size = 1.5, prob = 0.2)
+plotness(overdispersed, type = "poisson",
+         title = "Overdispersed counts on a Poissonness plot")
+```
+
+The curvature — points sagging below the line in the middle — is the tell-tale
+sign that a single Poisson rate does not describe these counts.
+
+## Getting the data instead of the plot
+
+Set `plot = FALSE` to receive the data frame that backs the plot. This lets you
+use your own graphics stack, or pull out the fitted line and confidence
+intervals for further analysis.
+
+```{r data}
+df <- plotness(pois_counts, type = "poisson", plot = FALSE)
+head(df)
+```
+
+The columns are:
+
+| Column | Meaning |
+|---|---|
+| `Counts` | the observed count value |
+| `Freq` | how many times it occurred |
+| `Metameter` | the observed point on the plot |
+| `CI.center`, `CI.width`, `CI.lower`, `CI.upper` | confidence interval around the smoothed metameter |
+| `y_line` | the fitted "perfect distribution" line at each count |
+
+A minimal hand-rolled version of the plot from that data:
+
+```{r data-plot}
+ggplot(df, aes(Counts)) +
+  geom_line(aes(y = y_line), colour = "blue") +
+  geom_point(aes(y = Metameter), colour = "red") +
+  labs(y = "Metameter", title = "Built from plotness(plot = FALSE)") +
+  theme_bw()
+```
+
+## Useful options
+
+A few arguments worth knowing:
+
+* `conf_int = FALSE` drops the confidence-interval bars.
+* `label = FALSE` removes the on-plot fit summary; `legend = FALSE` removes the
+  legend.
+* `title`, `xlab`, `ylab` override the text; `xlim` restricts the x-axis range.
+* For `type = "poisson"`, supplying `lambda` produces a *leveled* Poissonness
+  plot (useful when comparing against a hypothesized rate).
+
+```{r options}
+plotness(pois_counts, type = "poisson",
+         conf_int = FALSE, label = FALSE,
+         title = "Stripped-down Poissonness plot")
+```
+
+## Reference
+
+Hoaglin, D. C. & Tukey, J. W. (1985). Checking the shape of discrete
+distributions. In *Exploring Data Tables, Trends, and Shapes*. The underlying
+machinery follows `vcd::distplot()` (Meyer, Zeileis & Hornik).

@@ -1,0 +1,10 @@
+# R / RStudio
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.Rcheck/
+*.tar.gz
+
+# macOS
+.DS_Store

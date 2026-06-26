@@ -1,5 +1,5 @@
-#' Poisonness, Binomialness, and Negative Binomialness Plots
-#' @author Zayne Sember <zsember@ucsd.edu>
+#' Poissonness, Binomialness, and Negative Binomialness Plots
+#' @author Zayne Sember <zaynesember@gmail.com>
 #' @description  Creates a diagnostic distribution plot or dataframe. The function is adapted
 #' from the vcd library's distplot function to produce ggplots and to allow the
 #' option to return only the data needed for the plot so the user's preferred
@@ -33,7 +33,7 @@
 #' @examples
 #' plotness(rpois(15,10),type="poisson");
 #' plotness(rbinom(15,10,prob=0.5),type="binomial");
-#' plotness(rnbinom(15,10,prob=0.5),type="binomial");
+#' plotness(rnbinom(15,10,prob=0.5),type="nbinomial");
 #' plotness(rpois(15,10),type="poisson", plot=FALSE);
 #' @export
 plotness <-
@@ -127,27 +127,26 @@ plotness <-
     RVAL <- as.data.frame(RVAL)
     names(RVAL) <- c("Counts", "Freq", "Metameter", "CI.center",
                      "CI.width", "CI.lower", "CI.upper")
-    x_lim <- range(RVAL[,1])
-    y_line <- predict(fm, newdata = data.frame(mycount = xlim))
-
-    RVAL$y_line <- y_line
+    # Fitted "perfect distribution" line, evaluated at every count so the
+    # column aligns with RVAL even when some counts have zero frequency.
+    RVAL$y_line <- predict(fm, newdata = data.frame(mycount = RVAL$Counts))
 
     if(plot){
       switch(match.arg(type),
              "poisson" = {
-               if(is.null(title)){title="Poisonness Plot"}
-               label_x = 0.9*quantile(RVAL$Count)[4]
-               label_y = quantile(RVAL$Metameter)[2]
+               if(is.null(title)){title="Poissonness Plot"}
+               label_x = 0.9*quantile(RVAL$Counts)[4]
+               label_y = quantile(RVAL$Metameter, na.rm=TRUE)[2]
              },
              "binomial" = {
                if(is.null(title)){title="Binomialness Plot"}
-               label_x = 0.9*quantile(RVAL$Count)[4]
-               label_y = quantile(RVAL$Metameter)[2]
+               label_x = 0.9*quantile(RVAL$Counts)[4]
+               label_y = quantile(RVAL$Metameter, na.rm=TRUE)[2]
              },
              "nbinomial" = {
                if(is.null(title)){title="Negative Binomialness Plot"}
-               label_x = 0.8*quantile(RVAL$Count)[2]
-               label_y = quantile(RVAL$Metameter)[2]
+               label_x = 0.8*quantile(RVAL$Counts)[2]
+               label_y = quantile(RVAL$Metameter, na.rm=TRUE)[2]
              }
       )
 
@@ -159,7 +158,7 @@ plotness <-
 
       p <- ggplot(RVAL,aes()) +
         geom_line(aes(x=Counts,y=y_line, color="Perfect distribution"),
-                  size=0.75, key_glyph="point") +
+                  linewidth=0.75, key_glyph="point") +
         geom_point(aes(x=Counts, y=Metameter, color="Observed distribution"),
                    key_glyph="point") +
         xlab(xlab) +
@@ -175,8 +174,9 @@ plotness <-
                                          y=Metameter), color="red")}
       if(label){p <- p + annotate(geom="text", x=label_x, y=label_y,
                                    label=legend.text,hjust=0)}
-      if(legend){p <- p + labs(color="", position="bottom") +
+      if(legend){p <- p + labs(color="") +
                           theme(legend.position="top")}
+      if(!is.null(xlim)){p <- p + coord_cartesian(xlim=xlim)}
       return(p)
     }
     return(RVAL)
