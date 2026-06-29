@@ -9,6 +9,12 @@ Status legend: `[ ]` open · `[x]` done
 
 **As of this pass: all items resolved; `R CMD check` is clean (0/0/0).**
 
+> A subsequent enhancement round (relicense to GPL (>= 2) + vcd attribution,
+> input validation, the `plotness_fit()`/`autoplot()` API with exposed
+> estimates, Okabe-Ito plot polish, vdiffr/value-level tests, CI + pkgdown +
+> spell-check, and a styler/lintr pass) is recorded in `NEWS.md`. It passed an
+> adversarial multi-agent review; `R CMD check --as-cran` stays 0/0/0.
+
 ---
 
 ## 🔴 Correctness bugs

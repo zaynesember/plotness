@@ -1,5 +1,11 @@
 # plotness
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/zaynesember/plotness/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/zaynesember/plotness/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/zaynesember/plotness/graph/badge.svg)](https://app.codecov.io/gh/zaynesember/plotness)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+<!-- badges: end -->
+
 An R package improving upon the `vcd` package's `distplot()` function. It lets
 you produce **Poissonness**, **binomialness**, and **negative binomialness**
 plots with `ggplot2` — or return just the data needed for the plot so you can
@@ -46,6 +52,20 @@ plotness(rpois(15, 10), type = "poisson", plot = FALSE)
 See `?plotness` for the full list of arguments (confidence intervals, leveled
 Poissonness plots via `lambda`, custom titles/labels, and more).
 
+### Getting the fitted estimates
+
+`plotness_fit()` runs the same statistics and returns a `plotness_fit` object
+that exposes the fitted parameter estimates (rather than only printing them on
+the plot). `plotness()` is a thin wrapper around it plus `autoplot()`:
+
+```r
+fit <- plotness_fit(rpois(200, 6), type = "poisson")
+fit                       # prints slope/intercept and the parameter estimates
+coef(fit)                 # c(intercept, slope)
+fit$estimates$par_estim   # exp(slope): the implied rate
+ggplot2::autoplot(fit)    # the same figure plotness() would draw
+```
+
 ## Acknowledgements
 
 The statistical machinery is adapted from `vcd::distplot()` (Meyer, Zeileis &
@@ -53,4 +73,5 @@ Hornik). `plotness` reskins it with `ggplot2` and adds a data-only return mode.
 
 ## License
 
-MIT © Zayne Sember
+GPL (>= 2) © Zayne Sember. `plotness` adapts code from `vcd::distplot()`, which
+is GPL-2, so the package is distributed under a compatible GPL license.
