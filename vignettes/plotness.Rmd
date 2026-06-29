@@ -79,8 +79,10 @@ should bend the points away from the line:
 
 ```{r misfit}
 overdispersed <- rnbinom(200, size = 1.5, prob = 0.2)
-plotness(overdispersed, type = "poisson",
-         title = "Overdispersed counts on a Poissonness plot")
+plotness(overdispersed,
+  type = "poisson",
+  title = "Overdispersed counts on a Poissonness plot"
+)
 ```
 
 The curvature — points sagging below the line in the middle — is the tell-tale
@@ -111,11 +113,29 @@ A minimal hand-rolled version of the plot from that data:
 
 ```{r data-plot}
 ggplot(df, aes(Counts)) +
-  geom_line(aes(y = y_line), colour = "blue") +
-  geom_point(aes(y = Metameter), colour = "red") +
+  geom_line(aes(y = y_line), colour = "#D55E00") +
+  geom_point(aes(y = Metameter), colour = "#0072B2") +
   labs(y = "Metameter", title = "Built from plotness(plot = FALSE)") +
   theme_bw()
 ```
+
+## Getting the fitted estimates
+
+The on-plot summary is convenient, but the fitted numbers are also available
+programmatically. `plotness_fit()` returns a `plotness_fit` object that prints a
+short summary and exposes the estimates directly:
+
+```{r fit}
+fit <- plotness_fit(pois_counts, type = "poisson")
+fit
+
+coef(fit)
+fit$estimates$par_estim # exp(slope): the implied rate
+```
+
+`plotness(x, ...)` is simply `autoplot()` applied to this object, so
+`ggplot2::autoplot(fit)` reproduces the plot and you never have to recompute the
+fit to get both the figure and the numbers.
 
 ## Useful options
 
@@ -129,9 +149,11 @@ A few arguments worth knowing:
   plot (useful when comparing against a hypothesized rate).
 
 ```{r options}
-plotness(pois_counts, type = "poisson",
-         conf_int = FALSE, label = FALSE,
-         title = "Stripped-down Poissonness plot")
+plotness(pois_counts,
+  type = "poisson",
+  conf_int = FALSE, label = FALSE,
+  title = "Stripped-down Poissonness plot"
+)
 ```
 
 ## Reference
