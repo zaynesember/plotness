@@ -4,4 +4,8 @@
 ^LICENSE\.md$
 ^README\.Rmd$
 ^TODO\.md$
+^\.lintr$
 ^\.git$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
