@@ -2,21 +2,32 @@ Package: plotness
 Type: Package
 Title: Poissonness, Binomialness, and Negative Binomialness Plots
 Version: 0.1.0.9000
-Authors@R:
+Authors@R: c(
     person("Zayne", "Sember", email = "zaynesember@gmail.com",
-           role = c("aut", "cre"))
-Description: Creates a diagnostic distribution plot or data frame. The function
-    is adapted from the 'vcd' package's distplot() function to produce ggplots
-    and to allow the option to return only the data needed for the plot so the
-    user's preferred graphics package can be used.
+           role = c("aut", "cre")),
+    person("David", "Meyer", role = c("ctb", "cph"),
+           comment = "author of vcd::distplot(), from which the per-type statistics are adapted"),
+    person("Achim", "Zeileis", role = c("ctb", "cph"),
+           comment = "author of vcd::distplot()"),
+    person("Kurt", "Hornik", role = c("ctb", "cph"),
+           comment = "author of vcd::distplot()"),
+    person("Michael", "Friendly", role = c("ctb", "cph"),
+           comment = "author of vcd::distplot()"))
+Description: Creates a diagnostic distribution plot or data frame. The per-type
+    metameter statistics are adapted from the 'vcd' package's distplot()
+    function (GPL-2); this package produces 'ggplot2' graphics and can return
+    only the data needed for the plot so the user's preferred graphics package
+    can be used.
 Depends:
     R (>= 4.0)
 Imports:
+    cli,
     ggplot2,
+    rlang,
     stats,
     vcd
-License: MIT + file LICENSE
-URL: https://github.com/zaynesember/plotness
+License: GPL (>= 2)
+URL: https://github.com/zaynesember/plotness, https://zaynesember.github.io/plotness/
 BugReports: https://github.com/zaynesember/plotness/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -24,6 +35,9 @@ RoxygenNote: 7.3.3
 Suggests:
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    spelling,
+    testthat (>= 3.0.0),
+    vdiffr
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+Language: en-US

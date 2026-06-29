@@ -56,21 +56,27 @@ to \code{NULL} a generic title is produced based on the distribution type.}
 \item{ylab}{a label for the y-axis.}
 }
 \value{
-If \code{plot}=\code{TRUE}, returns a ggplot object; otherwise returns a
-data frame containing the data necessary to produce a plot.
+If \code{plot = TRUE}, a \link[ggplot2:ggplot]{ggplot2::ggplot} object; otherwise a data frame
+containing the data necessary to produce a plot. For programmatic access to
+the fitted parameter estimates, use \code{\link[=plotness_fit]{plotness_fit()}}.
 }
 \description{
-Creates a diagnostic distribution plot or dataframe. The function is adapted
-from the vcd library's distplot function to produce ggplots and to allow the
-option to return only the data needed for the plot so the user's preferred
-graphics package can be used.
+Creates a diagnostic distribution plot or its underlying data frame. Adapted
+from the \pkg{vcd} package's \code{distplot()} to produce \pkg{ggplot2} graphics
+and to allow returning only the data needed for the plot, so the user's
+preferred graphics package can be used.
+
+\code{plotness()} is a convenience wrapper: it fits the model with
+\code{\link[=plotness_fit]{plotness_fit()}} and then either draws it (via
+\link[=autoplot.plotness_fit]{autoplot()}) or returns the plotting data.
 }
 \examples{
-plotness(rpois(15,10),type="poisson");
-plotness(rbinom(15,10,prob=0.5),type="binomial");
-plotness(rnbinom(15,10,prob=0.5),type="nbinomial");
-plotness(rpois(15,10),type="poisson", plot=FALSE);
+plotness(rpois(15, 10), type = "poisson")
+plotness(rbinom(15, 10, prob = 0.5), type = "binomial")
+plotness(rnbinom(15, 10, prob = 0.5), type = "nbinomial")
+plotness(rpois(15, 10), type = "poisson", plot = FALSE)
 }
-\author{
-Zayne Sember \href{mailto:zaynesember@gmail.com}{zaynesember@gmail.com}
+\seealso{
+\code{\link[=plotness_fit]{plotness_fit()}} for the underlying fit object and estimates, and
+\code{\link[=autoplot.plotness_fit]{autoplot.plotness_fit()}} for the plotting method.
 }
